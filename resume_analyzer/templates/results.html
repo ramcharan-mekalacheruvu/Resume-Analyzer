@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Resume Analysis</title>
+</head>
+
+<body>
+
+    <h1>Resume Uploaded Successfully</h1>
+
+    <h2>Extracted Resume Text</h2>
+
+    <div>
+        <pre>{{ resume.extracted_text }}</pre>
+    </div>
+
+    <br>
+
+    <a href="{% url 'upload_resume' %}">
+        Analyze Another Resume
+    </a>
+
+</body>
+
+</html>

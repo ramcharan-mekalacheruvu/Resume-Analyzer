@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .forms import ResumeUploadForm
+from .services.resume_parser import extract_resume_text
 
 
 def home(request):
@@ -20,10 +21,30 @@ def upload_resume(request):
 
             resume = form.save()
 
-            return redirect(
-                "upload_success",
-                resume_id=resume.id
-            )
+            try:
+
+                file_path = resume.resume_file.path
+
+                extracted_text = extract_resume_text(
+                    file_path
+                )
+
+                resume.extracted_text = extracted_text
+                resume.save()
+
+                return redirect(
+                    "upload_success",
+                    resume_id=resume.id
+                )
+
+            except ValueError as error:
+
+                resume.delete()
+
+                form.add_error(
+                    "resume_file",
+                    str(error)
+                )
 
     else:
 
@@ -38,10 +59,16 @@ def upload_resume(request):
 
 def upload_success(request, resume_id):
 
+    from .models import Resume
+
+    resume = Resume.objects.get(
+        id=resume_id
+    )
+
     return render(
         request,
         "results.html",
         {
-            "resume_id": resume_id
+            "resume": resume
         }
     )

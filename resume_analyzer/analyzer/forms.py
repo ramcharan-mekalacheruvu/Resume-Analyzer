@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Resume
 
 
@@ -8,27 +9,33 @@ class ResumeUploadForm(forms.ModelForm):
         model = Resume
         fields = ["resume_file"]
 
+        widgets = {
+            "resume_file": forms.ClearableFileInput(
+                attrs={
+                    "accept": ".pdf,.docx"
+                }
+            )
+        }
+
     def clean_resume_file(self):
 
         file = self.cleaned_data["resume_file"]
 
         allowed_extensions = [".pdf", ".docx"]
 
-        filename = file.name.lower()
+        file_extension = "." + file.name.split(".")[-1].lower()
 
-        if not any(
-            filename.endswith(extension)
-            for extension in allowed_extensions
-        ):
+        if file_extension not in allowed_extensions:
             raise forms.ValidationError(
                 "Only PDF and DOCX files are allowed."
             )
 
+        # 5 MB limit
         max_size = 5 * 1024 * 1024
 
         if file.size > max_size:
             raise forms.ValidationError(
-                "Resume size must be less than 5 MB."
+                "File size must be less than 5 MB."
             )
 
         return file

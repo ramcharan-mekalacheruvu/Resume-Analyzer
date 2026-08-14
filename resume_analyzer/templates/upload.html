@@ -1,37 +1,33 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Upload Resume</title>
-</head>
+{% block content %}
 
-<body>
+<div class="upload-container">
 
     <h1>Upload Your Resume</h1>
 
     <p>
-        Upload your PDF or DOCX resume.
+        Upload your resume in PDF or DOCX format.
     </p>
 
-    <form method="POST"
-          enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
 
         {{ form.as_p }}
 
         <button type="submit">
-            Upload Resume
+            Analyze Resume
         </button>
 
     </form>
 
-    <br>
+    {% if form.errors %}
+        <div>
+            {{ form.errors }}
+        </div>
+    {% endif %}
 
-    <a href="{% url 'home' %}">
-        Back to Home
-    </a>
+</div>
 
-</body>
-
-</html>
+{% endblock %}

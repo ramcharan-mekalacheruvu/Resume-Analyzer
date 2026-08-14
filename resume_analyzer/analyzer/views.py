@@ -5,7 +5,11 @@ from .services.resume_parser import extract_resume_text
 
 
 def home(request):
-    return render(request, "home.html")
+
+    return render(
+        request,
+        "home.html"
+    )
 
 
 def upload_resume(request):
@@ -30,6 +34,7 @@ def upload_resume(request):
                 )
 
                 resume.extracted_text = extracted_text
+
                 resume.save()
 
                 return redirect(
@@ -53,7 +58,9 @@ def upload_resume(request):
     return render(
         request,
         "upload.html",
-        {"form": form}
+        {
+            "form": form
+        }
     )
 
 

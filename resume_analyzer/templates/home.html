@@ -1,22 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>AI Resume Analyzer</title>
-</head>
+{% block content %}
 
-<body>
+<div>
 
     <h1>AI Resume Analyzer</h1>
 
+    <h2>
+        Find the job roles that match your skills
+    </h2>
+
     <p>
-        Upload your resume to discover suitable job roles.
+        Upload your resume and our system will analyze
+        your skills and recommend suitable job roles.
     </p>
 
     <a href="{% url 'upload_resume' %}">
-        Upload Resume
+        <button>
+            Upload Resume
+        </button>
     </a>
 
-</body>
+</div>
 
-</html>
+{% endblock %}

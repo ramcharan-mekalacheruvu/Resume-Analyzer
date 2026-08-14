@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Upload Resume</title>
+</head>
+
+<body>
+
+    <h1>Upload Your Resume</h1>
+
+    <p>
+        Upload your PDF or DOCX resume.
+    </p>
+
+    <form method="POST"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Upload Resume
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{% url 'home' %}">
+        Back to Home
+    </a>
+
+</body>
+
+</html>

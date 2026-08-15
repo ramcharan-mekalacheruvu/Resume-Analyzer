@@ -1,26 +1,41 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Resume Analysis</title>
-</head>
+{% block content %}
 
-<body>
+<h1>Resume Analysis</h1>
 
-    <h1>Resume Uploaded Successfully</h1>
+<h2>Extracted Skills</h2>
 
-    <h2>Extracted Resume Text</h2>
+{% if skills %}
 
-    <div>
-        <pre>{{ resume.extracted_text }}</pre>
-    </div>
+    <ul>
 
-    <br>
+        {% for skill in skills %}
 
-    <a href="{% url 'upload_resume' %}">
-        Analyze Another Resume
-    </a>
+            <li>{{ skill }}</li>
 
-</body>
+        {% endfor %}
 
-</html>
+    </ul>
+
+{% else %}
+
+    <p>
+        No known skills were detected.
+    </p>
+
+{% endif %}
+
+
+<h2>Extracted Resume Text</h2>
+
+<pre>{{ resume.extracted_text }}</pre>
+
+
+<br>
+
+<a href="{% url 'upload_resume' %}">
+    Analyze Another Resume
+</a>
+
+{% endblock %}

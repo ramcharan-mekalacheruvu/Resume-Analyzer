@@ -28,6 +28,24 @@
     </div>
 
 
+    <!-- ATS FEEDBACK -->
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>
+                Resume Improvement Suggestions
+            </h3>
+            <ul class="mt-3">
+                {% for feedback in analysis.ats_feedback.splitlines %}
+                    <li class="mb-2">
+                        {{ feedback }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
     <!-- EXTRACTED SKILLS -->
 
     <div class="card mb-4">
@@ -179,6 +197,32 @@
     {% endfor %}
 
 
+    <!-- SKILLS TO LEARN -->
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>
+                Recommended Skills to Learn
+            </h3>
+            <p>
+                These skills can improve your suitability
+                for the recommended jobs.
+            </p>
+            <div class="mt-3">
+                {% for skill in skills_to_learn %}
+                    <span class="badge bg-primary me-2 mb-2">
+                        {{ skill }}
+                    </span>
+                {% empty %}
+                    <p>
+                        No additional skills identified.
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
     <!-- EXTRACTED RESUME TEXT -->
 
     <div class="card mt-5 mb-5">
@@ -200,7 +244,7 @@
 
     <div class="text-center mb-5">
 
-        <a
+        
             href="{% url 'upload_resume' %}"
             class="btn btn-primary"
         >

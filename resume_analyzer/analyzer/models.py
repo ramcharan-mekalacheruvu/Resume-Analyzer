@@ -42,6 +42,10 @@ class ResumeAnalysis(models.Model):
         blank=True
     )
 
+    ats_feedback = models.TextField(
+        blank=True
+    )
+
     analyzed_at = models.DateTimeField(
         auto_now_add=True
     )

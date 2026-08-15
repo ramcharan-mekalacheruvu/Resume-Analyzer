@@ -9,6 +9,10 @@ from .services.resume_parser import extract_resume_text
 from .services.skill_extractor import extract_skills
 from .services.recommender import recommend_jobs
 from .services.ats_score import calculate_ats_score
+from .services.ats_feedback import generate_ats_feedback
+from .services.learning_recommendation import (
+    get_skills_to_learn
+)
 
 
 def home(request):
@@ -52,6 +56,12 @@ def upload_resume(request):
                     skills
                 )
 
+                ats_feedback = generate_ats_feedback(
+                    extracted_text,
+                    skills,
+                    ats_score
+                )
+
                 # 5. Recommend suitable jobs
                 recommendations = recommend_jobs(
                     extracted_text,
@@ -90,21 +100,22 @@ def upload_resume(request):
                             skills
                         ),
 
-                        "recommended_jobs":
-                            json.dumps(
-                                recommended_jobs
-                            ),
+                        "recommended_jobs": json.dumps(
+                            recommended_jobs
+                        ),
 
                         "missing_skills": ", ".join(
                             sorted(
                                 {
                                     skill
                                     for job in recommendations
-                                    for skill in job[
-                                        "missing_skills"
-                                    ]
+                                    for skill in job["missing_skills"]
                                 }
                             )
+                        ),
+
+                        "ats_feedback": "\n".join(
+                            ats_feedback
                         ),
                     }
                 )
@@ -154,6 +165,10 @@ def upload_success(request, resume_id):
         analysis.recommended_jobs
     )
 
+    skills_to_learn = get_skills_to_learn(
+        recommended_jobs
+    )
+
     return render(
         request,
         "results.html",
@@ -161,5 +176,6 @@ def upload_success(request, resume_id):
             "resume": resume,
             "analysis": analysis,
             "recommended_jobs": recommended_jobs,
+            "skills_to_learn": skills_to_learn,
         }
     )

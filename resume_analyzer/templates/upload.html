@@ -10,6 +10,7 @@ Analyze Resume
 
     <div class="container">
 
+        <!-- PAGE HEADING -->
         <div class="upload-heading text-center">
 
             <span class="small-label">
@@ -32,6 +33,7 @@ Analyze Resume
 
             <div class="col-lg-7">
 
+                <!-- UPLOAD CARD -->
                 <div class="upload-card glass-card">
 
                     <div class="upload-icon">
@@ -48,23 +50,29 @@ Analyze Resume
 
 
                     <form method="POST"
-                          enctype="multipart/form-data">
+                          enctype="multipart/form-data"
+                          id="resumeUploadForm">
 
                         {% csrf_token %}
 
-                        <div class="file-area">
+
+                        <!-- FILE UPLOAD AREA -->
+                        <div class="file-area"
+                             id="fileArea">
 
                             {{ form.resume_file }}
 
-                            <div class="file-message">
+                            <div class="file-message"
+                                 id="fileMessage">
 
-                                <i class="bi bi-file-earmark-arrow-up"></i>
+                                <i class="bi bi-file-earmark-arrow-up"
+                                   id="fileIcon"></i>
 
-                                <strong>
+                                <strong id="fileName">
                                     Choose your resume
                                 </strong>
 
-                                <span>
+                                <span id="fileInfo">
                                     PDF or DOCX · Maximum 5 MB
                                 </span>
 
@@ -73,6 +81,7 @@ Analyze Resume
                         </div>
 
 
+                        <!-- ERROR -->
                         {% if form.resume_file.errors %}
 
                             <div class="alert alert-danger mt-3">
@@ -82,12 +91,17 @@ Analyze Resume
                         {% endif %}
 
 
+                        <!-- ANALYZE BUTTON -->
                         <button type="submit"
-                                class="btn btn-primary-custom w-100 mt-4">
+                                class="btn btn-primary-custom w-100 mt-4"
+                                id="analyzeButton">
 
-                            <i class="bi bi-stars"></i>
+                            <i class="bi bi-stars"
+                               id="analyzeIcon"></i>
 
-                            Analyze Resume
+                            <span id="buttonText">
+                                Analyze Resume
+                            </span>
 
                         </button>
 
@@ -96,6 +110,7 @@ Analyze Resume
                 </div>
 
 
+                <!-- PRIVACY -->
                 <div class="privacy-note">
 
                     <i class="bi bi-shield-check"></i>
@@ -116,9 +131,18 @@ Analyze Resume
 
 <style>
 
+/* =========================================
+   UPLOAD PAGE
+========================================= */
+
 .upload-page {
     padding: 80px 0;
 }
+
+
+/* =========================================
+   HEADING
+========================================= */
 
 .upload-heading {
     margin-bottom: 45px;
@@ -135,75 +159,514 @@ Analyze Resume
     font-size: 17px;
 }
 
+
+/* =========================================
+   UPLOAD CARD
+========================================= */
+
 .upload-card {
     padding: 45px;
     text-align: center;
 }
+
+
+/* =========================================
+   UPLOAD ICON
+========================================= */
 
 .upload-icon {
     width: 80px;
     height: 80px;
     border-radius: 20px;
     margin: 0 auto 25px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(37,99,235,.15);
+
+    background: rgba(37, 99, 235, .15);
     color: #60a5fa;
+
     font-size: 36px;
+
+    transition: .25s ease;
 }
+
+.upload-card:hover .upload-icon {
+    transform: translateY(-3px);
+    background: rgba(37, 99, 235, .22);
+}
+
+
+/* =========================================
+   FILE AREA
+========================================= */
 
 .file-area {
     position: relative;
+
     border: 2px dashed #334155;
     border-radius: 15px;
+
     padding: 35px 20px;
     margin-top: 25px;
-    transition: .2s;
+
+    min-height: 145px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        transform .2s ease;
+
+    overflow: hidden;
 }
 
-.file-area:hover {
-    border-color: #3b82f6;
-    background: rgba(37,99,235,.05);
-}
+
+/* Django file input */
 
 .file-area input[type="file"] {
     position: absolute;
+
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     opacity: 0;
+
     cursor: pointer;
+
+    z-index: 5;
 }
+
+
+/* Hover */
+
+.file-area:hover {
+    border-color: #3b82f6;
+
+    background:
+        rgba(37, 99, 235, .05);
+
+    transform: translateY(-2px);
+}
+
+
+/* Selected state */
+
+.file-area.file-selected {
+    border-color: #22c55e;
+
+    background:
+        rgba(34, 197, 94, .06);
+}
+
+
+/* =========================================
+   FILE MESSAGE
+========================================= */
 
 .file-message {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
+    justify-content: center;
+
     gap: 8px;
+
+    width: 100%;
+
+    pointer-events: none;
 }
+
+
+/* File icon */
 
 .file-message i {
     font-size: 30px;
+
     color: #60a5fa;
+
+    transition: .2s ease;
 }
+
+
+/* Selected file icon */
+
+.file-area.file-selected
+.file-message i {
+    color: #22c55e;
+}
+
+
+/* Filename */
+
+.file-message strong {
+    display: block;
+
+    max-width: 90%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #e2e8f0;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+
+/* File information */
 
 .file-message span {
     color: #64748b;
+
     font-size: 13px;
 }
 
+
+/* =========================================
+   ANALYZE BUTTON
+========================================= */
+
+#analyzeButton {
+    position: relative;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+}
+
+#analyzeButton:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Loading state */
+
+#analyzeButton.loading {
+    pointer-events: none;
+
+    opacity: .75;
+}
+
+
+/* =========================================
+   PRIVACY NOTE
+========================================= */
+
 .privacy-note {
     text-align: center;
+
     color: #64748b;
+
     font-size: 13px;
+
     margin-top: 20px;
 }
 
 .privacy-note i {
     color: #22c55e;
+
+    margin-right: 4px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .upload-page {
+        padding: 50px 15px;
+    }
+
+    .upload-heading h1 {
+        font-size: 36px;
+    }
+
+    .upload-heading p {
+        font-size: 15px;
+    }
+
+    .upload-card {
+        padding: 30px 20px;
+    }
+
+    .file-area {
+        padding: 30px 15px;
+    }
+
 }
 
 </style>
+
+
+<script>
+
+/*
+=================================================
+RESUME FILE SELECTION
+=================================================
+*/
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fileInput =
+        document.getElementById("id_resume_file");
+
+    const fileArea =
+        document.getElementById("fileArea");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const fileIcon =
+        document.getElementById("fileIcon");
+
+    const form =
+        document.getElementById("resumeUploadForm");
+
+    const analyzeButton =
+        document.getElementById("analyzeButton");
+
+    const buttonText =
+        document.getElementById("buttonText");
+
+    const analyzeIcon =
+        document.getElementById("analyzeIcon");
+
+
+    /*
+    =============================================
+    WHEN FILE IS SELECTED
+    =============================================
+    */
+
+    if (fileInput) {
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                if (this.files.length === 0) {
+
+                    resetFileDisplay();
+
+                    return;
+                }
+
+
+                const file =
+                    this.files[0];
+
+
+                /*
+                Check file type
+                */
+
+                const fileNameLower =
+                    file.name.toLowerCase();
+
+                const validFile =
+                    fileNameLower.endsWith(".pdf") ||
+                    fileNameLower.endsWith(".docx");
+
+
+                if (!validFile) {
+
+                    fileName.textContent =
+                        "Invalid file format";
+
+                    fileInfo.textContent =
+                        "Please select a PDF or DOCX file";
+
+                    fileArea.classList.remove(
+                        "file-selected"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                Check file size
+                */
+
+                const maxSize =
+                    5 * 1024 * 1024;
+
+
+                if (file.size > maxSize) {
+
+                    fileName.textContent =
+                        "File is too large";
+
+                    fileInfo.textContent =
+                        "Maximum file size is 5 MB";
+
+                    fileArea.classList.remove(
+                        "file-selected"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                File size
+                */
+
+                let sizeText;
+
+
+                if (file.size < 1024) {
+
+                    sizeText =
+                        file.size + " B";
+
+                } else if (file.size < 1024 * 1024) {
+
+                    sizeText =
+                        (file.size / 1024).toFixed(1)
+                        + " KB";
+
+                } else {
+
+                    sizeText =
+                        (file.size / (1024 * 1024))
+                            .toFixed(2)
+                        + " MB";
+                }
+
+
+                /*
+                Show filename
+                */
+
+                fileName.textContent =
+                    file.name;
+
+
+                fileInfo.textContent =
+                    sizeText +
+                    " · Ready to analyze";
+
+
+                /*
+                Green selected state
+                */
+
+                fileArea.classList.add(
+                    "file-selected"
+                );
+
+
+                /*
+                Change icon
+                */
+
+                if (fileNameLower.endsWith(".pdf")) {
+
+                    fileIcon.className =
+                        "bi bi-file-earmark-pdf";
+
+                } else {
+
+                    fileIcon.className =
+                        "bi bi-file-earmark-word";
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+    =============================================
+    FORM SUBMIT
+    =============================================
+    */
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            function () {
+
+                /*
+                Don't show loading if no file
+                */
+
+                if (
+                    !fileInput ||
+                    fileInput.files.length === 0
+                ) {
+                    return;
+                }
+
+
+                /*
+                Loading state
+                */
+
+                analyzeButton.classList.add(
+                    "loading"
+                );
+
+                analyzeIcon.className =
+                    "bi bi-hourglass-split";
+
+                buttonText.textContent =
+                    "Analyzing Resume...";
+
+            }
+        );
+
+    }
+
+
+    /*
+    =============================================
+    RESET DISPLAY
+    =============================================
+    */
+
+    function resetFileDisplay() {
+
+        fileName.textContent =
+            "Choose your resume";
+
+        fileInfo.textContent =
+            "PDF or DOCX · Maximum 5 MB";
+
+        fileIcon.className =
+            "bi bi-file-earmark-arrow-up";
+
+        fileArea.classList.remove(
+            "file-selected"
+        );
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

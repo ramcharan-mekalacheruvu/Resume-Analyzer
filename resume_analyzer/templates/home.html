@@ -1,26 +1,394 @@
 {% extends "base.html" %}
 
+{% block title %}
+Resume Analyzer | Find Your Best Career Match
+{% endblock %}
+
 {% block content %}
 
-<div>
+<section class="hero-section">
 
-    <h1>AI Resume Analyzer</h1>
+    <div class="container">
 
-    <h2>
-        Find the job roles that match your skills
-    </h2>
+        <div class="row align-items-center">
 
-    <p>
-        Upload your resume and our system will analyze
-        your skills and recommend suitable job roles.
-    </p>
+            <div class="col-lg-7">
 
-    <a href="{% url 'upload_resume' %}">
-        <button>
-            Upload Resume
-        </button>
-    </a>
+                <span class="hero-badge">
+                    <i class="bi bi-stars"></i>
+                    AI-Powered Resume Analysis
+                </span>
 
-</div>
+                <h1>
+                    Discover the
+                    <span class="gradient-text">
+                        right job
+                    </span>
+                    for your skills.
+                </h1>
+
+                <p class="hero-description">
+                    Upload your resume and let our intelligent analyzer
+                    extract your skills, evaluate your profile and
+                    recommend the most suitable job roles.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="{% url 'upload_resume' %}"
+                       class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-upload"></i>
+                        Analyze My Resume
+                    </a>
+
+                    <a href="#how-it-works"
+                       class="btn btn-outline-light btn-lg">
+                        How it works
+                    </a>
+
+                </div>
+
+                <div class="trust-row">
+
+                    <div>
+                        <strong>PDF</strong>
+                        <span>Supported</span>
+                    </div>
+
+                    <div>
+                        <strong>DOCX</strong>
+                        <span>Supported</span>
+                    </div>
+
+                    <div>
+                        <strong>10+</strong>
+                        <span>Job Roles</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5 mt-5 mt-lg-0">
+
+                <div class="analysis-preview glass-card">
+
+                    <div class="preview-header">
+                        <span>
+                            <i class="bi bi-file-earmark-text"></i>
+                            Resume Analysis
+                        </span>
+
+                        <span class="status-dot"></span>
+                    </div>
+
+                    <div class="preview-score">
+
+                        <div class="score-circle">
+                            <span>87%</span>
+                        </div>
+
+                        <div>
+                            <small>Overall Match</small>
+                            <h5>Full Stack Developer</h5>
+                            <p>Strong career match</p>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <p class="small text-muted-custom">
+                        Top matching skills
+                    </p>
+
+                    <div class="skill-preview">
+                        <span>Python</span>
+                        <span>JavaScript</span>
+                        <span>SQL</span>
+                        <span>HTML</span>
+                        <span>CSS</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="how-it-works" class="features-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="small-label">
+                SIMPLE PROCESS
+            </span>
+
+            <h2>
+                From resume to career direction
+            </h2>
+
+            <p>
+                Three simple steps to understand where your resume fits.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="feature-card glass-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </div>
+
+                    <h4>1. Upload Resume</h4>
+
+                    <p>
+                        Upload your resume in PDF or DOCX format.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card glass-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+
+                    <h4>2. Analyze Skills</h4>
+
+                    <p>
+                        The system extracts your technical skills
+                        and compares your profile with job requirements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card glass-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+
+                    <h4>3. Get Job Matches</h4>
+
+                    <p>
+                        Receive suitable job roles, match scores,
+                        matching skills and missing skills.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+.hero-section {
+    padding: 110px 0 90px;
+    background:
+        radial-gradient(circle at 80% 20%, rgba(37,99,235,.18), transparent 35%),
+        radial-gradient(circle at 20% 50%, rgba(6,182,212,.10), transparent 30%);
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 30px;
+    background: rgba(37,99,235,.12);
+    border: 1px solid rgba(96,165,250,.2);
+    color: #60a5fa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero-section h1 {
+    font-size: clamp(42px, 6vw, 70px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.hero-description {
+    max-width: 650px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #94a3b8;
+    margin: 25px 0;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.trust-row {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.trust-row div {
+    display: flex;
+    flex-direction: column;
+}
+
+.trust-row strong {
+    font-size: 20px;
+}
+
+.trust-row span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.analysis-preview {
+    padding: 28px;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+.preview-score {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.score-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 7px solid #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.preview-score small {
+    color: #64748b;
+}
+
+.preview-score h5 {
+    margin: 5px 0;
+}
+
+.preview-score p {
+    color: #22c55e;
+    font-size: 13px;
+    margin: 0;
+}
+
+.skill-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-preview span {
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: rgba(37,99,235,.12);
+    color: #93c5fd;
+    font-size: 13px;
+}
+
+.features-section {
+    padding: 90px 0;
+}
+
+.section-heading {
+    margin-bottom: 45px;
+}
+
+.small-label {
+    color: #22d3ee;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    font-size: 38px;
+    font-weight: 750;
+    margin-top: 10px;
+}
+
+.section-heading p {
+    color: #94a3b8;
+}
+
+.feature-card {
+    padding: 30px;
+    height: 100%;
+    transition: .25s;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(96,165,250,.3);
+}
+
+.feature-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37,99,235,.15);
+    color: #60a5fa;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.feature-card p {
+    color: #94a3b8;
+    line-height: 1.7;
+}
+
+</style>
 
 {% endblock %}

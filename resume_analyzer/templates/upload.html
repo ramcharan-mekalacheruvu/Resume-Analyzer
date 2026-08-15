@@ -1,28 +1,209 @@
 {% extends "base.html" %}
+
+{% block title %}
+Analyze Resume
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="mb-4">
-                Analyze Your Resume
+
+<div class="upload-page">
+
+    <div class="container">
+
+        <div class="upload-heading text-center">
+
+            <span class="small-label">
+                RESUME ANALYZER
+            </span>
+
+            <h1>
+                Analyze your resume
             </h1>
+
             <p>
-                Upload your resume in PDF or DOCX format.
+                Upload your resume and discover the job roles
+                that best match your skills.
             </p>
-            <form
-                method="POST"
-                enctype="multipart/form-data"
-            >
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    Analyze Resume
-                </button>
-            </form>
+
         </div>
+
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-7">
+
+                <div class="upload-card glass-card">
+
+                    <div class="upload-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </div>
+
+                    <h3>
+                        Upload your resume
+                    </h3>
+
+                    <p class="text-muted-custom">
+                        Supported formats: PDF and DOCX
+                    </p>
+
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <div class="file-area">
+
+                            {{ form.resume_file }}
+
+                            <div class="file-message">
+
+                                <i class="bi bi-file-earmark-arrow-up"></i>
+
+                                <strong>
+                                    Choose your resume
+                                </strong>
+
+                                <span>
+                                    PDF or DOCX · Maximum 5 MB
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if form.resume_file.errors %}
+
+                            <div class="alert alert-danger mt-3">
+                                {{ form.resume_file.errors }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <button type="submit"
+                                class="btn btn-primary-custom w-100 mt-4">
+
+                            <i class="bi bi-stars"></i>
+
+                            Analyze Resume
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="privacy-note">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Your resume is analyzed locally by the application.
+                    No account is required.
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
+
+
+<style>
+
+.upload-page {
+    padding: 80px 0;
+}
+
+.upload-heading {
+    margin-bottom: 45px;
+}
+
+.upload-heading h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+.upload-heading p {
+    color: #94a3b8;
+    font-size: 17px;
+}
+
+.upload-card {
+    padding: 45px;
+    text-align: center;
+}
+
+.upload-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    margin: 0 auto 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37,99,235,.15);
+    color: #60a5fa;
+    font-size: 36px;
+}
+
+.file-area {
+    position: relative;
+    border: 2px dashed #334155;
+    border-radius: 15px;
+    padding: 35px 20px;
+    margin-top: 25px;
+    transition: .2s;
+}
+
+.file-area:hover {
+    border-color: #3b82f6;
+    background: rgba(37,99,235,.05);
+}
+
+.file-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.file-message i {
+    font-size: 30px;
+    color: #60a5fa;
+}
+
+.file-message span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.privacy-note {
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.privacy-note i {
+    color: #22c55e;
+}
+
+</style>
+
 {% endblock %}

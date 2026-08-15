@@ -19,11 +19,14 @@ class ResumeUploadForm(forms.ModelForm):
 
     def clean_resume_file(self):
 
-        file = self.cleaned_data["resume_file"]
+        file = self.cleaned_data.get("resume_file")
+
+        if not file:
+            return file
 
         allowed_extensions = [".pdf", ".docx"]
 
-        file_extension = "." + file.name.split(".")[-1].lower()
+        file_extension = "." + file.name.rsplit(".", 1)[-1].lower()
 
         if file_extension not in allowed_extensions:
             raise forms.ValidationError(

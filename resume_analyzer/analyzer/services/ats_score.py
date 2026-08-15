@@ -1,126 +1,196 @@
-import re
+def calculate_ats_score(
+    resume_text,
+    skills
+):
 
-
-def calculate_ats_score(text, skills):
-    """
-    Calculate a simple ATS-style resume score.
-
-    The score is based on:
-    - Resume length
-    - Number of detected skills
-    - Important resume sections
-    - Contact information
-    """
+    text = resume_text.lower()
 
     score = 0
 
-    text_lower = text.lower()
-
-    # -------------------------------------------------
-    # 1. Resume length
-    # -------------------------------------------------
-
-    words = re.findall(r"\b\w+\b", text)
-
-    word_count = len(words)
-
-    if word_count >= 300:
-        score += 20
-    elif word_count >= 150:
-        score += 15
-    elif word_count >= 75:
-        score += 10
-    else:
-        score += 5
-
-    # -------------------------------------------------
-    # 2. Technical skills
-    # -------------------------------------------------
+    # -----------------------------------
+    # Skill score
+    # -----------------------------------
 
     skill_count = len(skills)
 
-    if skill_count >= 12:
-        score += 25
-    elif skill_count >= 8:
-        score += 20
+    if skill_count >= 15:
+        score += 40
+
+    elif skill_count >= 10:
+        score += 35
+
+    elif skill_count >= 7:
+        score += 30
+
     elif skill_count >= 5:
-        score += 15
+        score += 25
+
     elif skill_count >= 3:
-        score += 10
+        score += 20
+
     else:
-        score += 5
+        score += 10
 
-    # -------------------------------------------------
-    # 3. Resume sections
-    # -------------------------------------------------
 
-    sections = [
-        "education",
-        "experience",
-        "skills",
-        "projects",
-        "certifications",
-    ]
+    # -----------------------------------
+    # Resume sections
+    # -----------------------------------
 
-    section_count = 0
+    sections = {
 
-    for section in sections:
+        "education":
+            "education" in text,
 
-        if section in text_lower:
-            section_count += 1
+        "experience":
+            "experience" in text
+            or "internship" in text,
 
-    score += section_count * 5
+        "projects":
+            "project" in text
+            or "projects" in text,
 
-    # -------------------------------------------------
-    # 4. Email
-    # -------------------------------------------------
+        "certifications":
+            "certification" in text
+            or "certifications" in text,
 
-    email_pattern = r"[\w\.-]+@[\w\.-]+\.\w+"
+        "skills":
+            "skills" in text
+            or "technical skills" in text,
 
-    if re.search(email_pattern, text):
-        score += 5
+    }
 
-    # -------------------------------------------------
-    # 5. Phone number
-    # -------------------------------------------------
 
-    phone_pattern = r"\+?\d[\d\s\-]{8,}\d"
-
-    if re.search(phone_pattern, text):
-        score += 5
-
-    # -------------------------------------------------
-    # 6. Action words
-    # -------------------------------------------------
-
-    action_words = [
-        "developed",
-        "built",
-        "created",
-        "designed",
-        "implemented",
-        "developed",
-        "managed",
-        "integrated",
-        "deployed",
-        "analyzed",
-    ]
-
-    action_count = sum(
-        1
-        for word in action_words
-        if word in text_lower
+    section_count = sum(
+        sections.values()
     )
 
-    if action_count >= 5:
-        score += 15
-    elif action_count >= 3:
-        score += 10
-    elif action_count >= 1:
+
+    score += section_count * 7
+
+
+    # -----------------------------------
+    # Contact information
+    # -----------------------------------
+
+    if "@" in text:
         score += 5
 
-    # -------------------------------------------------
-    # Limit score to 100
-    # -------------------------------------------------
+    if "+" in text:
+        score += 5
 
-    return min(score, 100)
+
+    # -----------------------------------
+    # Resume length
+    # -----------------------------------
+
+    word_count = len(
+        resume_text.split()
+    )
+
+    if word_count >= 300:
+        score += 10
+
+    elif word_count >= 150:
+        score += 7
+
+    elif word_count >= 80:
+        score += 4
+
+
+    # -----------------------------------
+    # Maximum score
+    # -----------------------------------
+
+    score = min(
+        score,
+        100
+    )
+
+
+    # -----------------------------------
+    # Feedback
+    # -----------------------------------
+
+    feedback = []
+
+    if skill_count < 5:
+
+        feedback.append(
+            "Add more relevant technical skills."
+        )
+
+    if not sections["experience"]:
+
+        feedback.append(
+            "Consider adding internship or work experience."
+        )
+
+    if not sections["projects"]:
+
+        feedback.append(
+            "Add academic or personal projects."
+        )
+
+    if not sections["certifications"]:
+
+        feedback.append(
+            "Add relevant certifications."
+        )
+
+    if section_count >= 4:
+
+        feedback.append(
+            "Your resume has a good overall structure."
+        )
+
+
+    if not feedback:
+
+        feedback.append(
+            "Your resume has a reasonable ATS structure."
+        )
+
+
+    # -----------------------------------
+    # Missing skills
+    # -----------------------------------
+
+    recommended_basic_skills = [
+
+        "python",
+        "java",
+        "sql",
+        "git",
+        "rest api",
+        "html",
+        "css",
+        "javascript",
+
+    ]
+
+
+    missing_skills = []
+
+    for skill in recommended_basic_skills:
+
+        if skill not in [
+            s.lower()
+            for s in skills
+        ]:
+
+            missing_skills.append(
+                skill
+            )
+
+
+    return {
+
+        "score": score,
+
+        "feedback":
+            " ".join(feedback),
+
+        "missing_skills":
+            missing_skills[:5],
+
+    }

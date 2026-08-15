@@ -30,6 +30,10 @@ class ResumeAnalysis(models.Model):
         default=0
     )
 
+    ats_feedback = models.TextField(
+        blank=True
+    )
+
     extracted_skills = models.TextField(
         blank=True
     )
@@ -42,15 +46,12 @@ class ResumeAnalysis(models.Model):
         blank=True
     )
 
-    ats_feedback = models.TextField(
-        blank=True
-    )
-
     analyzed_at = models.DateTimeField(
         auto_now_add=True
     )
 
     def __str__(self):
+
         return (
             f"Analysis for "
             f"{self.resume.resume_file.name}"

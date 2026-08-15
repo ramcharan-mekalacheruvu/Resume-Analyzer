@@ -2,21 +2,18 @@ from django.db import models
 
 
 class Job(models.Model):
-
     title = models.CharField(max_length=200)
 
-    company = models.CharField(
-        max_length=200,
+    description = models.TextField(
         blank=True
     )
 
-    description = models.TextField()
+    skills = models.TextField(
+        help_text="Separate skills using commas or |"
+    )
 
-    required_skills = models.TextField()
-
-    location = models.CharField(
-        max_length=150,
-        blank=True
+    created_at = models.DateTimeField(
+        auto_now_add=True
     )
 
     def __str__(self):

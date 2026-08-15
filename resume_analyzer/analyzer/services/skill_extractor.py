@@ -1,26 +1,20 @@
 import csv
-import os
-import re
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+
+SKILLS_FILE = (
+    BASE_DIR / "datasets" / "skills.csv"
+)
 
 
 def load_skills():
 
-    base_dir = os.path.dirname(
-        os.path.dirname(
-            os.path.dirname(__file__)
-        )
-    )
-
-    csv_path = os.path.join(
-        base_dir,
-        "datasets",
-        "skills.csv"
-    )
-
     skills = []
 
     with open(
-        csv_path,
+        SKILLS_FILE,
         "r",
         encoding="utf-8"
     ) as file:
@@ -29,35 +23,30 @@ def load_skills():
 
         for row in reader:
 
-            skill = row.get("skill")
+            skill = row["skill"].strip()
 
             if skill:
-                skills.append(
-                    skill.strip()
-                )
+                skills.append(skill)
 
     return skills
 
 
-def extract_skills(resume_text):
+def extract_skills(text):
 
-    if not resume_text:
-        return []
+    text = text.lower()
 
-    text = resume_text.lower()
+    all_skills = load_skills()
 
-    available_skills = load_skills()
+    detected = []
 
-    found_skills = []
-
-    for skill in available_skills:
+    for skill in all_skills:
 
         skill_lower = skill.lower()
 
-        pattern = r"(?<!\w)" + re.escape(skill_lower) + r"(?!\w)"
+        if skill_lower in text:
 
-        if re.search(pattern, text):
+            detected.append(
+                skill
+            )
 
-            found_skills.append(skill)
-
-    return found_skills
+    return detected

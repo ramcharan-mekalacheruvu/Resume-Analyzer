@@ -1,78 +1,113 @@
-from analyzer.ml.predict import predict_jobs
+import csv
+from pathlib import Path
+
+from .similarity import calculate_similarity
+
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+
+JOBS_FILE = (
+    BASE_DIR / "datasets" / "jobs.csv"
+)
+
+
+def load_jobs():
+
+    jobs = []
+
+    with open(
+        JOBS_FILE,
+        "r",
+        encoding="utf-8"
+    ) as file:
+
+        reader = csv.DictReader(file)
+
+        for row in reader:
+
+            skills = [
+                skill.strip().lower()
+                for skill in row["skills"].split("|")
+            ]
+
+            jobs.append({
+                "title": row["job_title"],
+                "description": row["description"],
+                "skills": skills,
+            })
+
+    return jobs
 
 
 def recommend_jobs(
     resume_text,
-    extracted_skills,
+    resume_skills,
     top_n=5
 ):
-    """
-    Recommend suitable jobs using:
 
-    60% TF-IDF similarity
-    40% skill matching
-    """
+    jobs = load_jobs()
 
-    # Get TF-IDF recommendations
-    tfidf_results = predict_jobs(
-        resume_text,
-        top_n=10
-    )
-
-    # Convert resume skills to lowercase
     resume_skills = {
-        skill.lower().strip()
-        for skill in extracted_skills
+        skill.lower()
+        for skill in resume_skills
     }
 
-    final_results = []
+    results = []
 
-    for job in tfidf_results:
+    for job in jobs:
 
-        # Convert required skills to lowercase
-        required_skills = {
-            skill.lower().strip()
-            for skill in job["skills"].split("|")
-        }
+        job_skills = set(
+            job["skills"]
+        )
 
-        # Find matching skills
+        # -----------------------------------------
+        # Skill matching
+        # -----------------------------------------
+
         matching_skills = (
-            resume_skills
-            & required_skills
+            resume_skills & job_skills
         )
 
-        # Find missing skills
         missing_skills = (
-            required_skills
-            - resume_skills
+            job_skills - resume_skills
         )
 
-        # Calculate skill match percentage
-        if required_skills:
+        if job_skills:
 
             skill_score = (
                 len(matching_skills)
-                / len(required_skills)
+                / len(job_skills)
             ) * 100
 
         else:
 
             skill_score = 0
 
-        # TF-IDF score
-        tfidf_score = job["similarity"]
+        # -----------------------------------------
+        # TF-IDF similarity
+        # -----------------------------------------
 
-        # Final weighted score
-        final_score = (
-            (tfidf_score * 0.60)
-            + (skill_score * 0.40)
+        tfidf_score = calculate_similarity(
+            resume_text,
+            " ".join(job["skills"])
         )
 
-        final_results.append({
+        # -----------------------------------------
+        # Final score
+        # -----------------------------------------
+
+        final_score = (
+            0.60 * skill_score
+            +
+            0.40 * tfidf_score
+        )
+
+        results.append({
 
             "title": job["title"],
 
-            "description": job["description"],
+            "description":
+                job["description"],
 
             "score": round(
                 final_score
@@ -86,20 +121,18 @@ def recommend_jobs(
                 skill_score
             ),
 
-            "matching_skills": sorted(
-                matching_skills
-            ),
+            "matching_skills":
+                sorted(matching_skills),
 
-            "missing_skills": sorted(
-                missing_skills
-            ),
+            "missing_skills":
+                sorted(missing_skills),
 
         })
 
-    # Sort by final score
-    final_results.sort(
-        key=lambda item: item["score"],
+    # Highest score first
+    results.sort(
+        key=lambda x: x["score"],
         reverse=True
     )
 
-    return final_results[:top_n]
+    return results[:top_n]

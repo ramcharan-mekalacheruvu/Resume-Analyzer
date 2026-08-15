@@ -1,11 +1,42 @@
 job_title,description,skills
-Python Developer,Develop Python applications and backend services,Python|Flask|Django|SQL|Git|REST API
-Java Developer,Develop Java applications and enterprise software,Java|Spring Boot|SQL|Git|REST API
-Full Stack Developer,Develop frontend and backend web applications,HTML|CSS|JavaScript|React|Python|SQL|Git
-Backend Developer,Develop backend APIs and server applications,Python|Django|Flask|Java|SQL|REST API|Git
-Frontend Developer,Develop responsive web interfaces,HTML|CSS|JavaScript|React|Bootstrap|Git
-Machine Learning Engineer,Build and deploy machine learning models,Python|Machine Learning|Pandas|NumPy|Scikit-learn|TensorFlow
-Data Analyst,Analyze data and create business insights,Python|SQL|Pandas|Excel|Power BI|Statistics
-Data Scientist,Build predictive models and analyze datasets,Python|SQL|Pandas|NumPy|Scikit-learn|Machine Learning|Statistics
-DevOps Engineer,Automate deployment and manage cloud infrastructure,Linux|Docker|AWS|Git|CI/CD|Kubernetes
-Software Engineer,Develop and maintain software applications,Python|Java|C|SQL|Git|REST API
+Python Developer,Develop Python applications backend services and automation tools,Python|Flask|Django|FastAPI|SQL|Git|REST API|Pandas
+Java Developer,Develop Java applications enterprise software and backend services,Java|Spring Boot|Hibernate|JPA|SQL|Git|REST API|Maven
+Full Stack Developer,Develop complete web applications using frontend and backend technologies,HTML|CSS|JavaScript|React|Node.js|Express|Python|SQL|Git|REST API
+Backend Developer,Develop backend APIs services and server-side applications,Python|Django|Flask|FastAPI|Java|SQL|REST API|Git|Docker
+Frontend Developer,Build responsive and interactive web interfaces,HTML|CSS|JavaScript|React|Bootstrap|TypeScript|Git|REST API
+Machine Learning Engineer,Build train evaluate and deploy machine learning models,Python|Machine Learning|Pandas|NumPy|Scikit-learn|TensorFlow|PyTorch|Git
+Data Analyst,Analyze datasets create reports dashboards and business insights,Python|SQL|Pandas|Excel|Power BI|Tableau|Statistics
+Data Scientist,Build predictive models analyze datasets and solve business problems,Python|SQL|Pandas|NumPy|Scikit-learn|Machine Learning|Statistics|Matplotlib
+AI Engineer,Develop artificial intelligence solutions and integrate machine learning models,Python|Machine Learning|TensorFlow|PyTorch|Scikit-learn|NLP|Deep Learning|Git
+NLP Engineer,Develop natural language processing and text analysis systems,Python|NLP|NLTK|spaCy|Transformers|Machine Learning|Deep Learning|Git
+Computer Vision Engineer,Develop image processing and computer vision applications,Python|OpenCV|TensorFlow|PyTorch|Computer Vision|NumPy|Machine Learning|Git
+Data Engineer,Build data pipelines and maintain data processing systems,Python|SQL|Pandas|Spark|Hadoop|ETL|AWS|Git|Docker
+Database Developer,Design develop and maintain database systems and queries,SQL|MySQL|PostgreSQL|Oracle|MongoDB|Database|Python|Git
+SQL Developer,Develop optimize and maintain SQL queries stored procedures and databases,SQL|MySQL|PostgreSQL|Oracle|Database|Python|Git
+Software Engineer,Develop maintain test and improve software applications,Python|Java|C|C++|SQL|Git|REST API|Data Structures
+Software Developer,Design and implement software solutions using programming languages,Java|Python|C++|SQL|Git|REST API|Data Structures|OOP
+Web Developer,Develop websites and web applications using frontend technologies,HTML|CSS|JavaScript|Bootstrap|React|Git|REST API
+PHP Developer,Develop dynamic web applications and backend systems using PHP,PHP|HTML|CSS|JavaScript|MySQL|Laravel|Git|REST API
+React Developer,Build modern frontend applications using React and JavaScript,React|JavaScript|HTML|CSS|TypeScript|Redux|Git|REST API
+Node.js Developer,Develop scalable backend services and APIs using Node.js,Node.js|JavaScript|Express|MongoDB|SQL|REST API|Git|Docker
+MERN Stack Developer,Develop full stack applications using MongoDB Express React and Node.js,MongoDB|Express|React|Node.js|JavaScript|HTML|CSS|Git|REST API
+MEAN Stack Developer,Develop full stack applications using MongoDB Express Angular and Node.js,MongoDB|Express|Angular|Node.js|JavaScript|HTML|CSS|Git|REST API
+Django Developer,Develop secure web applications and REST APIs using Django,Python|Django|Django REST Framework|HTML|CSS|JavaScript|SQL|Git|REST API
+Flask Developer,Develop lightweight Python web applications and APIs using Flask,Python|Flask|SQL|HTML|CSS|JavaScript|REST API|Git
+Spring Boot Developer,Develop enterprise backend applications and APIs using Spring Boot,Java|Spring Boot|Hibernate|JPA|SQL|REST API|Git|Maven
+Android Developer,Develop mobile applications for Android devices,Java|Kotlin|Android|Android Studio|XML|SQLite|Git|REST API
+Cloud Engineer,Design deploy and manage cloud infrastructure and services,AWS|Azure|GCP|Linux|Docker|Kubernetes|Terraform|Git
+DevOps Engineer,Automate software development deployment and infrastructure processes,Linux|Docker|Kubernetes|AWS|Git|CI/CD|Jenkins|Terraform
+AWS Cloud Engineer,Deploy and manage applications infrastructure and services on AWS,AWS|Linux|Docker|Kubernetes|Terraform|Git|EC2|S3
+Cybersecurity Analyst,Monitor systems identify security threats and protect organizational data,Cybersecurity|Linux|Networking|Python|SIEM|Firewalls|SQL
+Network Engineer,Design configure and maintain computer networks,Networking|Linux|TCP/IP|Cisco|Routing|Switching|Firewalls|Python
+QA Engineer,Test software applications and identify defects,Testing|Selenium|Python|Java|SQL|Git|JIRA|API Testing
+Automation Test Engineer,Develop automated tests for web and software applications,Selenium|Python|Java|Testing|API Testing|Git|Jenkins|SQL
+DevOps Automation Engineer,Build automated CI/CD pipelines and infrastructure systems,Linux|Docker|Kubernetes|AWS|Jenkins|Git|CI/CD|Terraform
+UI Developer,Create responsive user interfaces and frontend components,HTML|CSS|JavaScript|React|Bootstrap|Figma|Git
+UX Developer,Develop user focused interfaces and interactive web experiences,HTML|CSS|JavaScript|React|Figma|UI Design|Git
+Business Analyst,Analyze business requirements data and processes,Excel|SQL|Power BI|Statistics|Business Analysis|Python|Tableau
+BI Developer,Develop dashboards reports and business intelligence solutions,SQL|Power BI|Tableau|Excel|Python|Data Visualization|Statistics
+Research Analyst,Analyze data conduct research and prepare analytical reports,Python|SQL|Excel|Statistics|Data Analysis|Research
+ML Operations Engineer,Deploy monitor and maintain machine learning models in production,Python|Machine Learning|Docker|Kubernetes|AWS|Git|CI/CD|TensorFlow
+Deep Learning Engineer,Develop deep learning models for AI applications,Python|Deep Learning|TensorFlow|PyTorch|NumPy|Pandas|Machine Learning|Git

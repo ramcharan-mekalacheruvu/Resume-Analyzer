@@ -1,258 +1,1073 @@
 {% extends "base.html" %}
 
+{% block title %}
+Resume Analysis Results
+{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5">
+<div class="results-page">
 
-    <h1 class="mb-4">
-        Resume Analysis
-    </h1>
+    <div class="container">
 
+        <!-- HEADER -->
+        <div class="results-header">
 
-    <!-- ATS SCORE -->
+            <div>
+                <span class="small-label">
+                    ANALYSIS COMPLETE
+                </span>
 
-    <div class="card mb-4">
+                <h1>
+                    Your Resume Analysis
+                </h1>
 
-        <div class="card-body">
-
-            <h3>
-                ATS Score
-            </h3>
-
-            <div class="display-4">
-                {{ analysis.ats_score }}%
+                <p>
+                    We analyzed your resume and identified the job roles
+                    that best match your current skills.
+                </p>
             </div>
 
-        </div>
+            <a href="{% url 'upload_resume' %}"
+               class="btn btn-primary-custom">
 
-    </div>
+                <i class="bi bi-plus-lg"></i>
+                Analyze Another Resume
 
-
-    <!-- ATS FEEDBACK -->
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3>
-                Resume Improvement Suggestions
-            </h3>
-            <ul class="mt-3">
-                {% for feedback in analysis.ats_feedback.splitlines %}
-                    <li class="mb-2">
-                        {{ feedback }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
-
-    <!-- EXTRACTED SKILLS -->
-
-    <div class="card mb-4">
-
-        <div class="card-body">
-
-            <h3>
-                Extracted Skills
-            </h3>
-
-            <div class="mt-3">
-
-                {% for skill in analysis.extracted_skills|cut:" "|default:""|join:", " %}
-                {% endfor %}
-
-                {{ analysis.extracted_skills }}
-
-            </div>
+            </a>
 
         </div>
 
-    </div>
 
+        <!-- SUMMARY -->
+        <div class="row g-4 mb-5">
 
-    <!-- RECOMMENDED JOBS -->
+            <!-- ATS SCORE -->
+            <div class="col-lg-3 col-md-6">
 
-    <h2 class="mb-3">
-        Suitable Jobs
-    </h2>
+                <div class="summary-card glass-card ats-summary-card">
 
+                    <div class="summary-icon cyan">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
 
-    {% for job in recommended_jobs %}
+                    <div>
+                        <span>ATS Score</span>
 
-    <div class="card mb-4">
-
-        <div class="card-body">
-
-            <h3>
-                {{ forloop.counter }}.
-                {{ job.title }}
-            </h3>
-
-
-            <h4 class="mt-3">
-                {{ job.score }}% Match
-            </h4>
-
-
-            <p>
-                {{ job.description }}
-            </p>
-
-
-            <!-- SCORE DETAILS -->
-
-            <div class="row mt-3">
-
-                <div class="col-md-6">
-
-                    <strong>
-                        TF-IDF Similarity:
-                    </strong>
-
-                    {{ job.tfidf_score }}%
-
-                </div>
-
-
-                <div class="col-md-6">
-
-                    <strong>
-                        Skill Match:
-                    </strong>
-
-                    {{ job.skill_score }}%
+                        <h2 class="ats-score">
+                            {{ analysis.ats_score }}%
+                        </h2>
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- MATCHING SKILLS -->
+            <!-- SKILLS -->
+            <div class="col-lg-3 col-md-6">
 
-            <div class="mt-4">
+                <div class="summary-card glass-card">
 
-                <h5>
-                    Matching Skills
-                </h5>
+                    <div class="summary-icon blue">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
 
-                {% if job.matching_skills %}
+                    <div>
+                        <span>Skills Detected</span>
 
-                    {% for skill in job.matching_skills %}
+                        <h2>
+                            {{ skill_count|default:"0" }}
+                        </h2>
+                    </div>
 
-                        <span class="badge bg-success me-1 mb-1">
-                            {{ skill }}
-                        </span>
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <p>
-                        No matching skills found.
-                    </p>
-
-                {% endif %}
+                </div>
 
             </div>
 
 
-            <!-- MISSING SKILLS -->
+            <!-- JOB MATCHES -->
+            <div class="col-lg-3 col-md-6">
 
-            <div class="mt-4">
+                <div class="summary-card glass-card">
 
-                <h5>
-                    Missing Skills
-                </h5>
+                    <div class="summary-icon green">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
 
-                {% if job.missing_skills %}
+                    <div>
+                        <span>Job Matches</span>
 
-                    {% for skill in job.missing_skills %}
+                        <h2>
+                            {{ job_count|default:"0" }}
+                        </h2>
+                    </div>
 
-                        <span class="badge bg-warning text-dark me-1 mb-1">
-                            {{ skill }}
-                        </span>
+                </div>
 
-                    {% endfor %}
+            </div>
 
-                {% else %}
 
-                    <p>
-                        No major missing skills.
-                    </p>
+            <!-- RESUME FILE -->
+            <div class="col-lg-3 col-md-6">
 
-                {% endif %}
+                <div class="summary-card glass-card">
+
+                    <div class="summary-icon purple">
+                        <i class="bi bi-file-earmark-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Resume</span>
+
+                        <h2 class="file-name">
+                            {{ resume.resume_file.name|slice:"9:" }}
+                        </h2>
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
 
-    {% empty %}
+        <!-- ATS SCORE DETAIL -->
 
-        <div class="alert alert-warning">
-            No suitable jobs found.
+        <section class="ats-section">
+
+            <div class="ats-card glass-card">
+
+                <div class="ats-header">
+
+                    <div>
+                        <span class="small-label">
+                            ATS COMPATIBILITY
+                        </span>
+
+                        <h2>
+                            Applicant Tracking System Score
+                        </h2>
+
+                        <p>
+                            This score estimates how well your resume is structured
+                            and optimized for automated resume screening.
+                        </p>
+                    </div>
+
+                    <div class="ats-circle">
+
+                        <strong>
+                            {{ analysis.ats_score }}%
+                        </strong>
+
+                        <span>
+                            ATS Score
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="ats-progress">
+                    <div class="ats-progress-bar"
+                         style="width: {{ analysis.ats_score }}%;">
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- JOB RECOMMENDATIONS -->
+
+        <div class="section-title">
+
+            <div>
+                <span class="small-label">
+                    CAREER MATCHES
+                </span>
+
+                <h2>
+                    Suitable Job Roles
+                </h2>
+            </div>
+
+            <span class="recommendation-count">
+                Top recommendations
+            </span>
+
         </div>
 
-    {% endfor %}
+
+        {% if jobs %}
+
+            <div class="job-list">
+
+                {% for job in jobs %}
+
+                <div class="job-card glass-card">
+
+                    <div class="job-top">
+
+                        <div class="job-number">
+                            #{{ forloop.counter }}
+                        </div>
+
+                        <div class="job-info">
+
+                            <h3>
+                                {{ job.title }}
+                            </h3>
+
+                            <p>
+                                {{ job.description }}
+                            </p>
+
+                        </div>
 
 
-    <!-- SKILLS TO LEARN -->
+                        <div class="match-score">
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3>
-                Recommended Skills to Learn
-            </h3>
-            <p>
-                These skills can improve your suitability
-                for the recommended jobs.
-            </p>
-            <div class="mt-3">
-                {% for skill in skills_to_learn %}
-                    <span class="badge bg-primary me-2 mb-2">
+                            <strong>
+                                {{ job.score }}%
+                            </strong>
+
+                            <span>
+                                Match
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SCORE BAR -->
+
+                    <div class="progress-container">
+
+                        <div class="progress">
+
+                            <div class="progress-bar"
+                                 role="progressbar"
+                                 style="width: {{ job.score }}%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="job-details">
+
+                        <!-- MATCHING SKILLS -->
+
+                        <div class="skills-column">
+
+                            <h5>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Matching Skills
+                            </h5>
+
+                            <div class="skill-list">
+
+                                {% for skill in job.matching_skills %}
+
+                                    <span class="skill matching">
+                                        {{ skill }}
+                                    </span>
+
+                                {% empty %}
+
+                                    <span class="no-skill">
+                                        No matching skills found
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MISSING SKILLS -->
+
+                        <div class="skills-column">
+
+                            <h5>
+                                <i class="bi bi-arrow-up-circle-fill"></i>
+                                Skills to Improve
+                            </h5>
+
+                            <div class="skill-list">
+
+                                {% for skill in job.missing_skills %}
+
+                                    <span class="skill missing">
+                                        {{ skill }}
+                                    </span>
+
+                                {% empty %}
+
+                                    <span class="skill matching">
+                                        All required skills matched
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SCORE BREAKDOWN -->
+
+                    <div class="score-breakdown">
+
+                        <div>
+
+                            <span>
+                                Skill Match
+                            </span>
+
+                            <strong>
+                                {{ job.skill_score }}%
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Resume Similarity
+                            </span>
+
+                            <strong>
+                                {{ job.tfidf_score }}%
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Overall Match
+                            </span>
+
+                            <strong>
+                                {{ job.score }}%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state glass-card">
+
+                <i class="bi bi-search"></i>
+
+                <h3>
+                    No job recommendations found
+                </h3>
+
+                <p>
+                    Try uploading a resume containing more technical
+                    skills and experience.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- EXTRACTED SKILLS -->
+
+        {% if skills %}
+
+        <section class="resume-section">
+
+            <div class="section-title">
+
+                <div>
+                    <span class="small-label">
+                        SKILLS DETECTED
+                    </span>
+
+                    <h2>
+                        Extracted Skills
+                    </h2>
+                </div>
+
+                <span class="recommendation-count">
+                    {{ skill_count }} skills found
+                </span>
+
+            </div>
+
+
+            <div class="skills-box glass-card">
+
+                {% for skill in skills %}
+
+                    <span class="large-skill">
+                        <i class="bi bi-check2-circle"></i>
                         {{ skill }}
                     </span>
-                {% empty %}
-                    <p>
-                        No additional skills identified.
-                    </p>
+
                 {% endfor %}
+
             </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- MISSING SKILLS -->
+
+        {% if missing_skills %}
+
+        <section class="resume-section">
+
+            <div class="section-title">
+
+                <div>
+                    <span class="small-label">
+                        SKILL GAPS
+                    </span>
+
+                    <h2>
+                        Skills You Could Add
+                    </h2>
+                </div>
+
+            </div>
+
+            <div class="skills-box glass-card">
+
+                {% for skill in missing_skills %}
+
+                    <span class="skill missing">
+                        {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- RESUME IMPROVEMENT -->
+
+        {% if feedback %}
+
+        <section class="resume-section">
+
+            <div class="section-title">
+
+                <div>
+                    <span class="small-label">
+                        RESUME IMPROVEMENT
+                    </span>
+
+                    <h2>
+                        How to Improve Your Resume
+                    </h2>
+                </div>
+
+                <span class="recommendation-count">
+                    ATS optimization tips
+                </span>
+
+            </div>
+
+
+            <div class="feedback-card glass-card">
+
+                {% for item in feedback %}
+
+                <div class="feedback-item">
+
+                    <div class="feedback-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+
+                    <div class="feedback-content">
+                        <p>
+                            {{ item }}
+                        </p>
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- RESUME TEXT -->
+
+        {% if resume.extracted_text %}
+
+        <section class="resume-section">
+
+            <div class="section-title">
+
+                <div>
+                    <span class="small-label">
+                        RESUME CONTENT
+                    </span>
+
+                    <h2>
+                        Extracted Resume Text
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="text-box glass-card">
+
+                <pre>{{ resume.extracted_text }}</pre>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- BOTTOM ACTION -->
+
+        <div class="bottom-action">
+
+            <a href="{% url 'upload_resume' %}"
+               class="btn btn-primary-custom btn-lg">
+
+                <i class="bi bi-arrow-repeat"></i>
+
+                Analyze Another Resume
+
+            </a>
+
         </div>
-    </div>
-
-
-    <!-- EXTRACTED RESUME TEXT -->
-
-    <div class="card mt-5 mb-5">
-
-        <div class="card-body">
-
-            <h2>
-                Extracted Resume Text
-            </h2>
-
-            <pre class="mt-3">{{ resume.extracted_text }}</pre>
-
-        </div>
-
-    </div>
-
-
-    <!-- ANALYZE ANOTHER -->
-
-    <div class="text-center mb-5">
-
-        
-            href="{% url 'upload_resume' %}"
-            class="btn btn-primary"
-        >
-            Analyze Another Resume
-        </a>
 
     </div>
 
 </div>
+
+
+<style>
+
+.results-page {
+    padding: 65px 0 80px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 30px;
+    margin-bottom: 45px;
+}
+
+.results-header h1 {
+    font-size: 45px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.results-header p {
+    color: #94a3b8;
+    margin: 0;
+    max-width: 650px;
+}
+
+.small-label {
+    color: #22d3ee;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.summary-card {
+    min-height: 125px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.summary-card span {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.summary-card h2 {
+    margin: 5px 0 0;
+    font-weight: 750;
+}
+
+.file-name {
+    font-size: 17px !important;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.summary-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+.summary-icon.blue {
+    background: rgba(37,99,235,.15);
+    color: #60a5fa;
+}
+
+.summary-icon.green {
+    background: rgba(34,197,94,.12);
+    color: #4ade80;
+}
+
+.summary-icon.purple {
+    background: rgba(168,85,247,.12);
+    color: #c084fc;
+}
+
+.summary-icon.cyan {
+    background: rgba(34, 211, 238, .12);
+    color: #22d3ee;
+}
+
+.ats-score {
+    color: #4ade80;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin: 50px 0 25px;
+}
+
+.section-title h2 {
+    font-size: 30px;
+    font-weight: 750;
+    margin: 7px 0 0;
+}
+
+.recommendation-count {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.job-card {
+    padding: 30px;
+    transition: .25s;
+}
+
+.job-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96,165,250,.3);
+}
+
+.job-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.job-number {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(37,99,235,.15);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.job-info {
+    flex: 1;
+}
+
+.job-info h3 {
+    margin: 0 0 7px;
+    font-size: 22px;
+}
+
+.job-info p {
+    margin: 0;
+    color: #94a3b8;
+}
+
+.match-score {
+    text-align: right;
+}
+
+.match-score strong {
+    display: block;
+    font-size: 30px;
+    color: #4ade80;
+}
+
+.match-score span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.progress-container {
+    margin: 25px 0;
+}
+
+.progress {
+    height: 8px;
+    background: #1e293b;
+    border-radius: 20px;
+}
+
+.progress-bar {
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #22d3ee
+    );
+    border-radius: 20px;
+}
+
+.job-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.skills-column h5 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.skills-column h5 i {
+    color: #4ade80;
+    margin-right: 5px;
+}
+
+.skills-column:nth-child(2) h5 i {
+    color: #fbbf24;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.skill {
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.skill.matching {
+    background: rgba(34,197,94,.10);
+    color: #86efac;
+    border: 1px solid rgba(34,197,94,.15);
+}
+
+.skill.missing {
+    background: rgba(251,191,36,.08);
+    color: #fcd34d;
+    border: 1px solid rgba(251,191,36,.15);
+}
+
+.no-skill {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.score-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.score-breakdown div {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: rgba(255,255,255,.025);
+    border-radius: 8px;
+}
+
+.score-breakdown span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.score-breakdown strong {
+    font-size: 13px;
+}
+
+.resume-section {
+    margin-top: 60px;
+}
+
+.skills-box {
+    padding: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.large-skill {
+    padding: 9px 14px;
+    background: rgba(37,99,235,.12);
+    color: #93c5fd;
+    border-radius: 8px;
+    border: 1px solid rgba(37,99,235,.15);
+}
+
+.large-skill i {
+    color: #4ade80;
+    margin-right: 4px;
+}
+
+.text-box {
+    padding: 30px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.text-box pre {
+    white-space: pre-wrap;
+    color: #cbd5e1;
+    font-family: inherit;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.empty-state {
+    padding: 70px 30px;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 45px;
+    color: #60a5fa;
+}
+
+.empty-state h3 {
+    margin-top: 15px;
+}
+
+.empty-state p {
+    color: #64748b;
+}
+
+.bottom-action {
+    text-align: center;
+    margin-top: 60px;
+}
+
+/* ATS SECTION */
+
+.ats-section {
+    margin-bottom: 55px;
+}
+
+.ats-card {
+    padding: 30px;
+}
+
+.ats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.ats-header h2 {
+    margin: 8px 0;
+    font-size: 25px;
+}
+
+.ats-header p {
+    color: #94a3b8;
+    margin: 0;
+    max-width: 700px;
+    line-height: 1.6;
+}
+
+.ats-circle {
+    width: 125px;
+    height: 125px;
+    min-width: 125px;
+
+    border-radius: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34,211,238,.12),
+            rgba(37,99,235,.04)
+        );
+
+    border: 2px solid rgba(34,211,238,.25);
+}
+
+.ats-circle strong {
+    font-size: 30px;
+    color: #4ade80;
+}
+
+.ats-circle span {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.ats-progress {
+    height: 9px;
+    background: #1e293b;
+    border-radius: 20px;
+    margin-top: 25px;
+    overflow: hidden;
+}
+
+.ats-progress-bar {
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #22d3ee,
+        #4ade80
+    );
+
+    border-radius: 20px;
+}
+
+/* FEEDBACK */
+
+.feedback-card {
+    padding: 10px 25px;
+}
+
+.feedback-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 20px 5px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.feedback-item:last-child {
+    border-bottom: none;
+}
+
+.feedback-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(34,211,238,.10);
+    color: #22d3ee;
+
+    font-size: 18px;
+}
+
+.feedback-content p {
+    margin: 0;
+    color: #cbd5e1;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+
+    .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .results-header h1 {
+        font-size: 35px;
+    }
+
+    .job-top {
+        flex-wrap: wrap;
+    }
+
+    .match-score {
+        margin-left: auto;
+    }
+
+    .job-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .score-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .ats-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ats-circle {
+        margin-top: 15px;
+    }
+
+}
+
+</style>
 
 {% endblock %}

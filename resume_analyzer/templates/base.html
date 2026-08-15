@@ -2,36 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-    <title>
-        Resume Analyzer
-    </title>
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Resume Analyzer{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #07111f;
+            color: #e8eef7;
+        }
+
+        .navbar {
+            background: rgba(7, 17, 31, 0.92);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #ffffff !important;
+            font-size: 1.3rem;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            margin-right: 8px;
+        }
+
+        .nav-link {
+            color: #aebbd0 !important;
+            margin-left: 10px;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-1px);
+            color: white;
+            opacity: 0.92;
+        }
+
+        .page-container {
+            min-height: calc(100vh - 70px);
+        }
+
+        .glass-card {
+            background: rgba(15, 31, 52, 0.75);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .text-muted-custom {
+            color: #94a3b8;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #60a5fa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            color: #718096;
+            padding: 25px 0;
+            margin-top: 60px;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
+
 <body>
-<nav class="navbar navbar-dark bg-dark">
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-        
-            class="navbar-brand"
-            href="{% url 'home' %}"
-        >
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <span class="brand-icon">
+                <i class="bi bi-file-earmark-person"></i>
+            </span>
             Resume Analyzer
         </a>
-        
-            class="btn btn-outline-light"
-            href="{% url 'upload_resume' %}"
-        >
-            Analyze Resume
-        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'upload_resume' %}">
+                        Analyze Resume
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
     </div>
 </nav>
-{% block content %}
+
+
+<div class="page-container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+<footer>
+    <div class="container text-center">
+        <small>
+            Resume Analyzer · AI-powered job recommendation system
+        </small>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% block extra_js %}
 {% endblock %}
+
 </body>
 </html>

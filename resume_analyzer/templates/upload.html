@@ -1,33 +1,28 @@
 {% extends "base.html" %}
-
 {% block content %}
-
-<div class="upload-container">
-
-    <h1>Upload Your Resume</h1>
-
-    <p>
-        Upload your resume in PDF or DOCX format.
-    </p>
-
-    <form method="POST" enctype="multipart/form-data">
-
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button type="submit">
-            Analyze Resume
-        </button>
-
-    </form>
-
-    {% if form.errors %}
-        <div>
-            {{ form.errors }}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="mb-4">
+                Analyze Your Resume
+            </h1>
+            <p>
+                Upload your resume in PDF or DOCX format.
+            </p>
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Analyze Resume
+                </button>
+            </form>
         </div>
-    {% endif %}
-
+    </div>
 </div>
-
 {% endblock %}

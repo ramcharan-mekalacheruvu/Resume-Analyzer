@@ -5,126 +5,94 @@ from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-# --------------------------------------------------
-# Project paths
-# --------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parents[2]
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-DATASET_PATH = BASE_DIR / "datasets" / "jobs.csv"
+JOBS_FILE = BASE_DIR / "datasets" / "jobs.csv"
 
 MODEL_DIR = BASE_DIR / "trained_models"
 
-TFIDF_PATH = MODEL_DIR / "tfidf.pkl"
-
-JOB_VECTORS_PATH = MODEL_DIR / "job_vectors.pkl"
-
-
-# --------------------------------------------------
-# Load jobs
-# --------------------------------------------------
-
-def load_jobs():
-
-    jobs = []
-
-    with open(
-        DATASET_PATH,
-        "r",
-        encoding="utf-8"
-    ) as file:
-
-        reader = csv.DictReader(file)
-
-        for row in reader:
-
-            # Combine description and skills
-            job_text = (
-                row["description"]
-                + " "
-                + row["skills"].replace("|", " ")
-            )
-
-            jobs.append({
-                "job_title": row["job_title"],
-                "description": row["description"],
-                "skills": row["skills"],
-                "text": job_text,
-            })
-
-    return jobs
+MODEL_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
 
 
-# --------------------------------------------------
-# Train TF-IDF
-# --------------------------------------------------
+print("Loading job dataset...")
 
-def train_model():
+jobs = []
 
-    print("Loading job dataset...")
+with open(
+    JOBS_FILE,
+    "r",
+    encoding="utf-8"
+) as file:
 
-    jobs = load_jobs()
+    reader = csv.DictReader(file)
 
-    job_texts = [
-        job["text"]
-        for job in jobs
-    ]
+    for row in reader:
 
-    print(
-        f"Loaded {len(jobs)} jobs."
+        jobs.append({
+            "title": row["job_title"],
+            "description": row["description"],
+            "skills": row["skills"],
+        })
+
+
+print(f"Loaded {len(jobs)} jobs.")
+
+
+job_texts = []
+
+for job in jobs:
+
+    text = (
+        job["title"]
+        + " "
+        + job["description"]
+        + " "
+        + job["skills"].replace("|", " ")
     )
 
-    # Create TF-IDF vectorizer
-    vectorizer = TfidfVectorizer(
-        lowercase=True,
-        stop_words="english"
-    )
+    job_texts.append(text)
 
-    # Convert job descriptions to vectors
-    job_vectors = vectorizer.fit_transform(
-        job_texts
-    )
 
-    # Create trained_models directory
-    MODEL_DIR.mkdir(
-        exist_ok=True
-    )
+vectorizer = TfidfVectorizer(
+    stop_words="english"
+)
 
-    # Save vectorizer
-    with open(
-        TFIDF_PATH,
-        "wb"
-    ) as file:
+job_vectors = vectorizer.fit_transform(
+    job_texts
+)
 
-        pickle.dump(
-            vectorizer,
-            file
-        )
 
-    # Save job information + vectors
-    with open(
-        JOB_VECTORS_PATH,
-        "wb"
-    ) as file:
+with open(
+    MODEL_DIR / "tfidf.pkl",
+    "wb"
+) as file:
 
-        pickle.dump(
-            {
-                "jobs": jobs,
-                "vectors": job_vectors,
-            },
-            file
-        )
-
-    print()
-    print("TF-IDF model trained successfully.")
-    print(
-        f"Saved: {TFIDF_PATH}"
-    )
-    print(
-        f"Saved: {JOB_VECTORS_PATH}"
+    pickle.dump(
+        vectorizer,
+        file
     )
 
 
-if __name__ == "__main__":
+with open(
+    MODEL_DIR / "job_vectors.pkl",
+    "wb"
+) as file:
 
-    train_model()
+    pickle.dump(
+        job_vectors,
+        file
+    )
+
+
+print("TF-IDF model trained successfully.")
+
+print(
+    f"Saved: {MODEL_DIR / 'tfidf.pkl'}"
+)
+
+print(
+    f"Saved: {MODEL_DIR / 'job_vectors.pkl'}"
+)

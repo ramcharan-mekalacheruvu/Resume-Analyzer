@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: resume-analyzer
+    runtime: python
+    plan: free
+
+    buildCommand: ./build.sh
+
+    startCommand: gunicorn resume_analyzer.wsgi:application
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.4
+
+      - key: DEBUG
+        value: "False"
+
+      - key: SECRET_KEY
+        generateValue: true
